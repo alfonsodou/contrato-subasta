@@ -14,7 +14,7 @@
 					},
 					{
 						"internalType": "uint256",
-						"name": "_minBids",
+						"name": "_minBid",
 						"type": "uint256"
 					},
 					{
@@ -25,6 +25,105 @@
 				],
 				"stateMutability": "nonpayable",
 				"type": "constructor"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "bidder",
+						"type": "address"
+					}
+				],
+				"name": "AlreadyBid",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "currentTime",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "deadline",
+						"type": "uint256"
+					}
+				],
+				"name": "AuctionEnded",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "sent",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "minBid",
+						"type": "uint256"
+					}
+				],
+				"name": "BidTooLow",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "senderBalance",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "required",
+						"type": "uint256"
+					}
+				],
+				"name": "InsufficientBalance",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "sent",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "currentMax",
+						"type": "uint256"
+					}
+				],
+				"name": "NotHighestBid",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "owner",
+						"type": "address"
+					}
+				],
+				"name": "OwnerCannotBid",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "addressMaxBid",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
 			},
 			{
 				"inputs": [],
@@ -61,7 +160,20 @@
 			},
 			{
 				"inputs": [],
-				"name": "minBids",
+				"name": "maxBid",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "minBid",
 				"outputs": [
 					{
 						"internalType": "uint256",
@@ -84,48 +196,37 @@
 				],
 				"stateMutability": "view",
 				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"name": "participants",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "topBid",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
 			}
 		],
 		"devdoc": {
+			"details": "Permite pujar por un artículo durante un tiempo limitado.",
 			"kind": "dev",
-			"methods": {},
+			"methods": {
+				"constructor": {
+					"details": "La puja debe ser mayor que la actual.",
+					"params": {
+						"_description": "Artículo a subastar.",
+						"_minBid": "Monto de la puja mínima inicial en wei.",
+						"_minutes": "Duración de la subasta en minutos."
+					}
+				},
+				"makeBid()": {
+					"details": "La puja debe ser mayor que la actual."
+				}
+			},
+			"title": "Subasta simple",
 			"version": 1
 		},
 		"userdoc": {
 			"kind": "user",
-			"methods": {},
+			"methods": {
+				"constructor": {
+					"notice": "Crea la subasta"
+				},
+				"makeBid()": {
+					"notice": "Realiza una puja"
+				}
+			},
 			"version": 1
 		}
 	},
@@ -146,11 +247,11 @@
 	},
 	"sources": {
 		"contracts/subasta.sol": {
-			"keccak256": "0xd62885f7f4a556f3e94a3eee29467548eeb235f8f8398bbff72394618255d1a5",
+			"keccak256": "0xf8ac0e10de9b25132c984ba9158d2ff0a1228af1128c92a6b0315377d091df11",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://d1c178399ed76f201a15ca8c11cedd94c0f1ab6dcf0826da26a816c57cae5de1",
-				"dweb:/ipfs/QmXLyb4fAkKF2tvMGhkF6jHnRqs3pUSu68wum2weGmnv1e"
+				"bzz-raw://bb21f932dae72bb9154ae4620056f2a386b5c5d56cfb4761d4e0724a28589928",
+				"dweb:/ipfs/QmfDN5dUTG1Qe2aGsZWs2rxTVx3DEWVtML8wwLAyhTySGz"
 			]
 		}
 	},

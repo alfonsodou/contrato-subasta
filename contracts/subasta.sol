@@ -1,41 +1,98 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.10;
 
+/**
+ * @title Subasta simple
+ * @dev Permite pujar por un artículo durante un tiempo limitado.
+ */
 contract Subasta {
-    address public owner = 0xF55301514c27489Fde7C9cd9A3EA8044E7E04579;
-    string  public description;
-    uint256 public minBids;
-    uint256 public deadLine;
+    address public  owner = 0xF55301514c27489Fde7C9cd9A3EA8044E7E04579;
+    string  public  description;
+    uint256 public  minBid;
+    uint256 public  maxBid;
+    address public  addressMaxBid;
+    uint256 public  deadLine;
+    bool    private bloqueado; // Semáforo para funciones críticas
 
     mapping (address => uint256) bids;
-    address[] public participants;
 
-    constructor (string memory _description, uint256 _minBids, uint256 _minutes) {
+    // Errores personalizados
+    error AuctionEnded(uint256 currentTime, uint256 deadline);
+    error AlreadyBid(address bidder);
+    error OwnerCannotBid(address owner);
+    error BidTooLow(uint256 sent, uint256 minBid);
+    error NotHighestBid(uint256 sent, uint256 currentMax);
+    error InsufficientBalance(uint256 senderBalance, uint256 required);
+
+    /**
+     * @notice Crea la subasta
+     * @param _description Artículo a subastar.
+     * @param _minBid Monto de la puja mínima inicial en wei.
+     * @param _minutes Duración de la subasta en minutos.
+     * @dev La puja debe ser mayor que la actual.
+     */
+    constructor (string memory _description, uint256 _minBid, uint256 _minutes) {
         description = _description;
-        minBids = _minBids;
+        minBid = _minBid;
+        maxBid = _minBid;
         deadLine = block.timestamp + _minutes * 1 minutes;
     }    
 
+    /**
+     * @notice Realiza una puja
+     * @dev La puja debe ser mayor que la actual.
+     */
     function makeBid () external payable {
-        require(block.timestamp < deadLine, "Subasta finalizada!");
-        require(bids[msg.sender] == 0, "Ya hiciste una oferta");
-        require(msg.sender != owner, "No puedes ofertar a tu propia subasta");
-        require(msg.value >= minBids, "Oferta minima no alcanzada");
-        require(topBid() < msg.value, "Tu oferta no es la mas alta");
-        require(msg.sender.balance > 0.01 ether + msg.value, "Sin saldo");
-
-        bids[msg.sender] = msg.value;
-        participants.push(msg.sender);
-    }
-
-    function topBid() public view returns (uint256) {
-        uint256 max = 0;
-        for(uint256 i = 0; i < participants.length; i++) {
-            if (bids[participants[i]] > max) {
-                max = bids[participants[i]];
-            }
+        // Checks
+        // Subasta todavía abierta
+        if (block.timestamp >= deadLine) {
+            revert AuctionEnded({
+                currentTime: block.timestamp,
+                deadline:    deadLine
+            });
         }
 
-        return max;
+        // El propietario no puede pujar en su propia subasta
+        if (msg.sender == owner) {
+            revert OwnerCannotBid({ owner: owner });
+        }
+
+        // El remitente aún no ha hecho una oferta
+        if (bids[msg.sender] != 0) {
+            revert AlreadyBid({ bidder: msg.sender });
+        }
+
+        // La oferta debe ser al menos el mínimo inicial exigido
+        if (msg.value < minBid) {
+            revert BidTooLow({ sent: msg.value, minBid: minBid });
+        }
+
+        // La oferta debe superar la máxima actual
+        if (maxBid >= msg.value) {
+            revert NotHighestBid({ sent: msg.value, currentMax: maxBid });
+        }
+
+        // El ofertante necesita suficiente saldo libre (incluyendo el 0.01 ether de reserva)
+        uint256 required = 0.01 ether + msg.value;
+        if (msg.sender.balance < required) {
+            revert InsufficientBalance({
+                senderBalance: msg.sender.balance,
+                required:      required
+            });
+        }
+
+        // Effects
+        bids[msg.sender] = msg.value;
+        maxBid = msg.value;
+        addressMaxBid = msg.sender;
+    }
+
+
+    // Modificador para prevenir ataques de reentrada
+    modifier noReentrancy() {
+        if (bloqueado) revert();
+        bloqueado = true;
+        _;
+        bloqueado = false;
     }
 }
