@@ -26,7 +26,9 @@ contract Subasta {
     error InsufficientBalance(uint256 senderBalance, uint256 required);
     error MaxBidNotRefund(address maxBidder);
     error NotBid(address bidder);
-    error NotRefund(address bidder);
+    error NotRefund(address bidder, uint256 amount);
+    error NotOwner(address bidder);
+    error NotWithdraw(address bidder, uint256 amount);
 
     /**
      * @notice Crea la subasta
@@ -122,7 +124,43 @@ contract Subasta {
         // Interactions
         (bool ok, ) = payable(msg.sender).call{value:bids[msg.sender]}("");
         if (!ok) {
-            revert NotRefund( {bidder: msg.sender} );
+            revert NotRefund( {
+                bidder: msg.sender,
+                amount: bids[msg.sender]
+            });
+        }
+    }
+
+    /**
+     * @notice Recupera importe puja ganadora
+     * @dev Solo si la subasta está terminada y es el propietario.
+     */
+    function ownerWithdraw () external noReentrancy {
+        // Checks
+
+        // Es el propietario
+        if (msg.sender != owner) {
+            revert NotOwner( {bidder: msg.sender} );
+        }
+
+        // Subasta cerrada
+        if (block.timestamp < deadLine) {
+            revert AuctionNotEnded({
+                currentTime: block.timestamp,
+                deadline:    deadLine
+            });
+        }
+        
+        // Effects
+        bids[addressMaxBid] = 0;
+
+        // Interactions
+        (bool ok, ) = payable(owner).call{value:maxBid}("");
+        if (!ok) {
+            revert NotWithdraw({
+                bidder: msg.sender,
+                amount: maxBid
+            });
         }
     }
 

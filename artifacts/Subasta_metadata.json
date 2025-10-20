@@ -147,7 +147,39 @@
 						"type": "address"
 					}
 				],
+				"name": "NotOwner",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "bidder",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
 				"name": "NotRefund",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "bidder",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "NotWithdraw",
 				"type": "error"
 			},
 			{
@@ -248,6 +280,13 @@
 			},
 			{
 				"inputs": [],
+				"name": "ownerWithdraw",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
 				"name": "refund",
 				"outputs": [],
 				"stateMutability": "nonpayable",
@@ -268,6 +307,9 @@
 				"makeBid()": {
 					"details": "La puja debe ser mayor que la actual."
 				},
+				"ownerWithdraw()": {
+					"details": "Solo si la subasta está terminada y es el propietario."
+				},
 				"refund()": {
 					"details": "Solo si la subasta está terminada y no es la puja ganadora."
 				}
@@ -283,6 +325,9 @@
 				},
 				"makeBid()": {
 					"notice": "Realiza una puja"
+				},
+				"ownerWithdraw()": {
+					"notice": "Recupera importe puja ganadora"
 				},
 				"refund()": {
 					"notice": "Recupera la puja realizada"
@@ -308,11 +353,11 @@
 	},
 	"sources": {
 		"contracts/subasta.sol": {
-			"keccak256": "0x5dd67e8b93a8821aaa063cd169cf5f6cefe73b9cf046622f389ee991826dc9e9",
+			"keccak256": "0x1cfd0ebdcf249415928bb13cf1daa91e8552006323b0ca4133a4a0b92f201756",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://01658320517066d5fa6e482b79752d554533302d1e3d02e0994c7370b340507d",
-				"dweb:/ipfs/QmSeP21ciYpiXBZk6YKQxefwcdEQtXkJtK4DpAgWjMELHF"
+				"bzz-raw://9d80ac335f9092b9af6b3a1524a5f061e118f22263fffcd58044203ddcde6c99",
+				"dweb:/ipfs/QmbkSG2LDDHn9tZLzoUfQFn5xMb6b3wpUKUSUVuq7HT7KP"
 			]
 		}
 	},
