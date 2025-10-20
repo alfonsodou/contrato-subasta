@@ -57,6 +57,22 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
+						"name": "currentTime",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "deadline",
+						"type": "uint256"
+					}
+				],
+				"name": "AuctionNotEnded",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
 						"name": "sent",
 						"type": "uint256"
 					},
@@ -88,6 +104,28 @@
 			{
 				"inputs": [
 					{
+						"internalType": "address",
+						"name": "maxBidder",
+						"type": "address"
+					}
+				],
+				"name": "MaxBidNotRefund",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "bidder",
+						"type": "address"
+					}
+				],
+				"name": "NotBid",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
 						"internalType": "uint256",
 						"name": "sent",
 						"type": "uint256"
@@ -99,6 +137,17 @@
 					}
 				],
 				"name": "NotHighestBid",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "bidder",
+						"type": "address"
+					}
+				],
+				"name": "NotRefund",
 				"type": "error"
 			},
 			{
@@ -196,6 +245,13 @@
 				],
 				"stateMutability": "view",
 				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "refund",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
 			}
 		],
 		"devdoc": {
@@ -203,7 +259,6 @@
 			"kind": "dev",
 			"methods": {
 				"constructor": {
-					"details": "La puja debe ser mayor que la actual.",
 					"params": {
 						"_description": "Artículo a subastar.",
 						"_minBid": "Monto de la puja mínima inicial en wei.",
@@ -212,6 +267,9 @@
 				},
 				"makeBid()": {
 					"details": "La puja debe ser mayor que la actual."
+				},
+				"refund()": {
+					"details": "Solo si la subasta está terminada y no es la puja ganadora."
 				}
 			},
 			"title": "Subasta simple",
@@ -225,6 +283,9 @@
 				},
 				"makeBid()": {
 					"notice": "Realiza una puja"
+				},
+				"refund()": {
+					"notice": "Recupera la puja realizada"
 				}
 			},
 			"version": 1
@@ -247,11 +308,11 @@
 	},
 	"sources": {
 		"contracts/subasta.sol": {
-			"keccak256": "0xf8ac0e10de9b25132c984ba9158d2ff0a1228af1128c92a6b0315377d091df11",
+			"keccak256": "0x5dd67e8b93a8821aaa063cd169cf5f6cefe73b9cf046622f389ee991826dc9e9",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://bb21f932dae72bb9154ae4620056f2a386b5c5d56cfb4761d4e0724a28589928",
-				"dweb:/ipfs/QmfDN5dUTG1Qe2aGsZWs2rxTVx3DEWVtML8wwLAyhTySGz"
+				"bzz-raw://01658320517066d5fa6e482b79752d554533302d1e3d02e0994c7370b340507d",
+				"dweb:/ipfs/QmSeP21ciYpiXBZk6YKQxefwcdEQtXkJtK4DpAgWjMELHF"
 			]
 		}
 	},

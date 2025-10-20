@@ -18,18 +18,21 @@ contract Subasta {
 
     // Errores personalizados
     error AuctionEnded(uint256 currentTime, uint256 deadline);
+    error AuctionNotEnded(uint256 currentTime, uint256 deadline);
     error AlreadyBid(address bidder);
     error OwnerCannotBid(address owner);
     error BidTooLow(uint256 sent, uint256 minBid);
     error NotHighestBid(uint256 sent, uint256 currentMax);
     error InsufficientBalance(uint256 senderBalance, uint256 required);
+    error MaxBidNotRefund(address maxBidder);
+    error NotBid(address bidder);
+    error NotRefund(address bidder);
 
     /**
      * @notice Crea la subasta
      * @param _description Artículo a subastar.
      * @param _minBid Monto de la puja mínima inicial en wei.
      * @param _minutes Duración de la subasta en minutos.
-     * @dev La puja debe ser mayor que la actual.
      */
     constructor (string memory _description, uint256 _minBid, uint256 _minutes) {
         description = _description;
@@ -44,6 +47,7 @@ contract Subasta {
      */
     function makeBid () external payable {
         // Checks
+
         // Subasta todavía abierta
         if (block.timestamp >= deadLine) {
             revert AuctionEnded({
@@ -87,6 +91,40 @@ contract Subasta {
         addressMaxBid = msg.sender;
     }
 
+    /**
+     * @notice Recupera la puja realizada
+     * @dev Solo si la subasta está terminada y no es la puja ganadora.
+     */
+    function refund () external noReentrancy {
+        // Checks
+
+        // Subasta cerrada
+        if (block.timestamp < deadLine) {
+            revert AuctionNotEnded({
+                currentTime: block.timestamp,
+                deadline:    deadLine
+            });
+        }
+
+        // Puja ganadora
+        if (addressMaxBid == msg.sender) {
+            revert MaxBidNotRefund( {maxBidder: msg.sender} );
+        }
+
+        // No hizo puja
+        if (bids[msg.sender] == 0) {
+            revert NotBid( {bidder: msg.sender} );
+        }
+ 
+        // Effects
+        bids[msg.sender] = 0;
+
+        // Interactions
+        (bool ok, ) = payable(msg.sender).call{value:bids[msg.sender]}("");
+        if (!ok) {
+            revert NotRefund( {bidder: msg.sender} );
+        }
+    }
 
     // Modificador para prevenir ataques de reentrada
     modifier noReentrancy() {
