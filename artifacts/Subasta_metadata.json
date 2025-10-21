@@ -248,8 +248,14 @@
 			{
 				"inputs": [],
 				"name": "isActive",
-				"outputs": [],
-				"stateMutability": "nonpayable",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
 				"type": "function"
 			},
 			{
@@ -376,11 +382,11 @@
 	},
 	"sources": {
 		"contracts/subasta.sol": {
-			"keccak256": "0x9fe5939aea5545ce86ce2dc58297b3057f0ef743de02ee5bc3830460a0fa5088",
+			"keccak256": "0x88aff280a3d60a3dca076e53718ccd1d67b324ecfa7fa2cd7491c8806424bd44",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://ce3aeeccf2601ed0db52aeea5b458e8f6073be5a199e44ae20554db894f262f2",
-				"dweb:/ipfs/QmZU1zreE1BzavZDep3NDCqE8MwtDeo1gHXcnqMa4wP5qA"
+				"bzz-raw://d17de49b0ff01d8fc3634bbdf658a240da3f610ac8da2632e6c70b8a12fc6510",
+				"dweb:/ipfs/Qmaktpjj2rSVzvVCzR3sn3ULDcjHCUYmkCFfp5GjgZs9wb"
 			]
 		}
 	},

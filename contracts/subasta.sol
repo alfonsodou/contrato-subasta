@@ -173,17 +173,8 @@ contract Subasta {
     /**
      * @notice Comprueba si la subasta sigue activa
      */
-    function isActive() external {
-        // Checks
-
-        // Effects
-        if (block.timestamp < deadLine) {
-            active = true;
-        } else {
-            active = false;
-        }
-
-        // Interactions
+    function isActive() external view returns (bool) {
+        return block.timestamp < deadLine;
     }
 
     // Modificador para prevenir ataques de reentrada
