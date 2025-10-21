@@ -12,6 +12,7 @@ contract Subasta {
     uint256 public  maxBid;
     address public  addressMaxBid;
     uint256 public  deadLine;
+    bool    public  active;
     bool    private bloqueado; // Semáforo para funciones críticas
 
     mapping (address => uint256) bids;
@@ -41,6 +42,7 @@ contract Subasta {
         minBid = _minBid;
         maxBid = _minBid;
         deadLine = block.timestamp + _minutes * 1 minutes;
+        active = true;
     }    
 
     /**
@@ -51,11 +53,13 @@ contract Subasta {
         // Checks
 
         // Subasta todavía abierta
-        if (block.timestamp >= deadLine) {
-            revert AuctionEnded({
-                currentTime: block.timestamp,
-                deadline:    deadLine
-            });
+        if ((!active) || 
+            (block.timestamp >= deadLine)) {
+                active = false;
+                revert AuctionEnded({
+                    currentTime: block.timestamp,
+                    deadline:    deadLine
+                });
         }
 
         // El propietario no puede pujar en su propia subasta
@@ -101,7 +105,8 @@ contract Subasta {
         // Checks
 
         // Subasta cerrada
-        if (block.timestamp < deadLine) {
+        if ((active) || 
+            (block.timestamp < deadLine)) {
             revert AuctionNotEnded({
                 currentTime: block.timestamp,
                 deadline:    deadLine
@@ -144,7 +149,8 @@ contract Subasta {
         }
 
         // Subasta cerrada
-        if (block.timestamp < deadLine) {
+        if ((active) || 
+            (block.timestamp < deadLine)) {
             revert AuctionNotEnded({
                 currentTime: block.timestamp,
                 deadline:    deadLine
@@ -162,6 +168,22 @@ contract Subasta {
                 amount: maxBid
             });
         }
+    }
+
+    /**
+     * @notice Comprueba si la subasta sigue activa
+     */
+    function isActive() external {
+        // Checks
+
+        // Effects
+        if (block.timestamp < deadLine) {
+            active = true;
+        } else {
+            active = false;
+        }
+
+        // Interactions
     }
 
     // Modificador para prevenir ataques de reentrada
