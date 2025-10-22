@@ -194,6 +194,25 @@
 				"type": "error"
 			},
 			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "bidder",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "Bid",
+				"type": "event"
+			},
+			{
 				"inputs": [],
 				"name": "active",
 				"outputs": [
@@ -281,6 +300,19 @@
 			{
 				"inputs": [],
 				"name": "minBid",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "numBids",
 				"outputs": [
 					{
 						"internalType": "uint256",
@@ -382,11 +414,11 @@
 	},
 	"sources": {
 		"contracts/subasta.sol": {
-			"keccak256": "0x88aff280a3d60a3dca076e53718ccd1d67b324ecfa7fa2cd7491c8806424bd44",
+			"keccak256": "0x98f8b21b68f6187057cfb12a47a2f71891ef0a9c3395c857e3799c701b5ed786",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://d17de49b0ff01d8fc3634bbdf658a240da3f610ac8da2632e6c70b8a12fc6510",
-				"dweb:/ipfs/Qmaktpjj2rSVzvVCzR3sn3ULDcjHCUYmkCFfp5GjgZs9wb"
+				"bzz-raw://ed0487944f3b9f75ff4f9ef5c032eb30e535fffcf7d1dce433b4ac4f956698bc",
+				"dweb:/ipfs/QmXFhTafYygmvmYT13VpGymkpRi5nuPd4PC8q5azHjAgzm"
 			]
 		}
 	},

@@ -13,9 +13,13 @@ contract Subasta {
     address public  addressMaxBid;
     uint256 public  deadLine;
     bool    public  active;
+    uint256 public  numBids;
     bool    private bloqueado; // Semáforo para funciones críticas
 
     mapping (address => uint256) bids;
+
+    // Eventos personalizados
+    event Bid(address bidder, uint256 amount);
 
     // Errores personalizados
     error AuctionEnded(uint256 currentTime, uint256 deadline);
@@ -42,7 +46,7 @@ contract Subasta {
         minBid = _minBid;
         maxBid = _minBid;
         deadLine = block.timestamp + _minutes * 1 minutes;
-        active = true;
+        numBids = 0;
     }    
 
     /**
@@ -53,8 +57,7 @@ contract Subasta {
         // Checks
 
         // Subasta todavía abierta
-        if ((!active) || 
-            (block.timestamp >= deadLine)) {
+        if  (block.timestamp >= deadLine) {
                 active = false;
                 revert AuctionEnded({
                     currentTime: block.timestamp,
@@ -95,6 +98,8 @@ contract Subasta {
         bids[msg.sender] = msg.value;
         maxBid = msg.value;
         addressMaxBid = msg.sender;
+        numBids++;
+        emit Bid(msg.sender, msg.value);
     }
 
     /**
@@ -105,8 +110,7 @@ contract Subasta {
         // Checks
 
         // Subasta cerrada
-        if ((active) || 
-            (block.timestamp < deadLine)) {
+        if (block.timestamp < deadLine) {
             revert AuctionNotEnded({
                 currentTime: block.timestamp,
                 deadline:    deadLine
@@ -149,8 +153,7 @@ contract Subasta {
         }
 
         // Subasta cerrada
-        if ((active) || 
-            (block.timestamp < deadLine)) {
+        if (block.timestamp < deadLine) {
             revert AuctionNotEnded({
                 currentTime: block.timestamp,
                 deadline:    deadLine
