@@ -214,19 +214,6 @@
 			},
 			{
 				"inputs": [],
-				"name": "active",
-				"outputs": [
-					{
-						"internalType": "bool",
-						"name": "",
-						"type": "bool"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
 				"name": "addressMaxBid",
 				"outputs": [
 					{
@@ -414,11 +401,11 @@
 	},
 	"sources": {
 		"contracts/subasta.sol": {
-			"keccak256": "0x98f8b21b68f6187057cfb12a47a2f71891ef0a9c3395c857e3799c701b5ed786",
+			"keccak256": "0xf03486edc02a9334628f207f6da740b684216b3d8d62ee9b6eaf7c102239e403",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://ed0487944f3b9f75ff4f9ef5c032eb30e535fffcf7d1dce433b4ac4f956698bc",
-				"dweb:/ipfs/QmXFhTafYygmvmYT13VpGymkpRi5nuPd4PC8q5azHjAgzm"
+				"bzz-raw://18deaed13320a5e187dda34c69db2398bcbd3e1e959cd503dcfd6efdaf69126c",
+				"dweb:/ipfs/Qmf8PW4dRAK9feAzwXk5xuxp3XTi1io75gKSWYrecdfwog"
 			]
 		}
 	},

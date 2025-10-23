@@ -12,7 +12,6 @@ contract Subasta {
     uint256 public  maxBid;
     address public  addressMaxBid;
     uint256 public  deadLine;
-    bool    public  active;
     uint256 public  numBids;
     bool    private bloqueado; // Semáforo para funciones críticas
 
@@ -58,7 +57,6 @@ contract Subasta {
 
         // Subasta todavía abierta
         if  (block.timestamp >= deadLine) {
-                active = false;
                 revert AuctionEnded({
                     currentTime: block.timestamp,
                     deadline:    deadLine
