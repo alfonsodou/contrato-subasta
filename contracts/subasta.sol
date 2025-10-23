@@ -12,7 +12,7 @@ contract Subasta {
     uint256 public  maxBid;
     address public  addressMaxBid;
     uint256 public  deadLine;
-    uint256 public  numBids;
+    //uint256 public  numBids;
     bool    private bloqueado; // Semáforo para funciones críticas
 
     mapping (address => uint256) bids;
@@ -20,6 +20,7 @@ contract Subasta {
     // Eventos personalizados
     event Bid(address bidder, uint256 amount);
 
+/*
     // Errores personalizados
     error AuctionEnded(uint256 currentTime, uint256 deadline);
     error AuctionNotEnded(uint256 currentTime, uint256 deadline);
@@ -33,6 +34,7 @@ contract Subasta {
     error NotRefund(address bidder, uint256 amount);
     error NotOwner(address bidder);
     error NotWithdraw(address bidder, uint256 amount);
+*/
 
     /**
      * @notice Crea la subasta
@@ -43,9 +45,9 @@ contract Subasta {
     constructor (string memory _description, uint256 _minBid, uint256 _minutes) {
         description = _description;
         minBid = _minBid;
-        maxBid = _minBid;
+        maxBid = 0;
         deadLine = block.timestamp + _minutes * 1 minutes;
-        numBids = 0;
+        //numBids = 0;
     }    
 
     /**
@@ -56,47 +58,55 @@ contract Subasta {
         // Checks
 
         // Subasta todavía abierta
-        if  (block.timestamp >= deadLine) {
+        require(block.timestamp < deadLine, "Subasta cerrada");
+        /*if  (block.timestamp >= deadLine) {
                 revert AuctionEnded({
                     currentTime: block.timestamp,
                     deadline:    deadLine
                 });
-        }
+        }*/
+
+        require(msg.value > 0, "Sin envio de bTNB");
 
         // El propietario no puede pujar en su propia subasta
-        if (msg.sender == owner) {
+        require(msg.sender != owner, "El propietario no puede pujar");
+        /*if (msg.sender == owner) {
             revert OwnerCannotBid({ owner: owner });
-        }
+        }*/
 
         // El remitente aún no ha hecho una oferta
-        if (bids[msg.sender] != 0) {
+        require(bids[msg.sender] == 0, "Ya realizaste una puja");
+        /*if (bids[msg.sender] != 0) {
             revert AlreadyBid({ bidder: msg.sender });
-        }
+        }*/
 
         // La oferta debe ser al menos el mínimo inicial exigido
-        if (msg.value < minBid) {
+        require(msg.value > minBid, "La puja debe ser mas ata que la puja minima");
+        /*if (msg.value < minBid) {
             revert BidTooLow({ sent: msg.value, minBid: minBid });
-        }
+        }*/
 
         // La oferta debe superar la máxima actual
-        if (maxBid >= msg.value) {
+        require(msg.value > maxBid, "La puja debe ser mas alta");
+        /*if (maxBid >= msg.value) {
             revert NotHighestBid({ sent: msg.value, currentMax: maxBid });
-        }
+        }*/
 
         // El ofertante necesita suficiente saldo libre (incluyendo el 0.01 ether de reserva)
         uint256 required = 0.01 ether + msg.value;
-        if (msg.sender.balance < required) {
+        require(required >= msg.sender.balance, "No tienes saldo suficiente");
+        /*if (msg.sender.balance < required) {
             revert InsufficientBalance({
                 senderBalance: msg.sender.balance,
                 required:      required
             });
-        }
+        }*/
 
         // Effects
         bids[msg.sender] = msg.value;
         maxBid = msg.value;
         addressMaxBid = msg.sender;
-        numBids++;
+        //numBids++;
         emit Bid(msg.sender, msg.value);
     }
 
@@ -108,34 +118,38 @@ contract Subasta {
         // Checks
 
         // Subasta cerrada
-        if (block.timestamp < deadLine) {
+        require(block.timestamp > deadLine, "La subasta todavia esta abierta");
+        /*if (block.timestamp < deadLine) {
             revert AuctionNotEnded({
                 currentTime: block.timestamp,
                 deadline:    deadLine
             });
-        }
+        }*/
 
         // Puja ganadora
-        if (addressMaxBid == msg.sender) {
+        require(addressMaxBid != msg.sender, "Tu puja es la ganadora. No puedes recuperarla");
+        /*if (addressMaxBid == msg.sender) {
             revert MaxBidNotRefund( {maxBidder: msg.sender} );
-        }
+        }*/
 
         // No hizo puja
-        if (bids[msg.sender] == 0) {
+        require(bids[msg.sender] != 0, "No pujaste por este articulo");
+        /*if (bids[msg.sender] == 0) {
             revert NotBid( {bidder: msg.sender} );
-        }
+        }*/
  
         // Effects
         bids[msg.sender] = 0;
 
         // Interactions
         (bool ok, ) = payable(msg.sender).call{value:bids[msg.sender]}("");
-        if (!ok) {
+        require(ok, "Fallo al enviar fondos");
+        /*if (!ok) {
             revert NotRefund( {
                 bidder: msg.sender,
                 amount: bids[msg.sender]
             });
-        }
+        }*/
     }
 
     /**
@@ -146,36 +160,35 @@ contract Subasta {
         // Checks
 
         // Es el propietario
-        if (msg.sender != owner) {
+        require(msg.sender == owner, "No eres el propietario del articulo");
+        /*if (msg.sender != owner) {
             revert NotOwner( {bidder: msg.sender} );
-        }
+        }*/
 
         // Subasta cerrada
-        if (block.timestamp < deadLine) {
+        require(block.timestamp > deadLine, "La subasta no est cerrada todavia");
+        /*if (block.timestamp < deadLine) {
             revert AuctionNotEnded({
                 currentTime: block.timestamp,
                 deadline:    deadLine
             });
-        }
+        }*/
         
+        // Se realizaron pujas
+        //require(numBids > 0, "No hubo ninguna puja");
+
         // Effects
         bids[addressMaxBid] = 0;
 
         // Interactions
         (bool ok, ) = payable(owner).call{value:maxBid}("");
-        if (!ok) {
+        require(ok, "Fallo al enviar fondos");
+        /*if (!ok) {
             revert NotWithdraw({
                 bidder: msg.sender,
                 amount: maxBid
             });
-        }
-    }
-
-    /**
-     * @notice Comprueba si la subasta sigue activa
-     */
-    function isActive() external view returns (bool) {
-        return block.timestamp < deadLine;
+        }*/
     }
 
     // Modificador para prevenir ataques de reentrada

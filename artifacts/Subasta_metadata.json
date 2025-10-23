@@ -27,173 +27,6 @@
 				"type": "constructor"
 			},
 			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "bidder",
-						"type": "address"
-					}
-				],
-				"name": "AlreadyBid",
-				"type": "error"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "currentTime",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "deadline",
-						"type": "uint256"
-					}
-				],
-				"name": "AuctionEnded",
-				"type": "error"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "currentTime",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "deadline",
-						"type": "uint256"
-					}
-				],
-				"name": "AuctionNotEnded",
-				"type": "error"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "sent",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "minBid",
-						"type": "uint256"
-					}
-				],
-				"name": "BidTooLow",
-				"type": "error"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "senderBalance",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "required",
-						"type": "uint256"
-					}
-				],
-				"name": "InsufficientBalance",
-				"type": "error"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "maxBidder",
-						"type": "address"
-					}
-				],
-				"name": "MaxBidNotRefund",
-				"type": "error"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "bidder",
-						"type": "address"
-					}
-				],
-				"name": "NotBid",
-				"type": "error"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "sent",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "currentMax",
-						"type": "uint256"
-					}
-				],
-				"name": "NotHighestBid",
-				"type": "error"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "bidder",
-						"type": "address"
-					}
-				],
-				"name": "NotOwner",
-				"type": "error"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "bidder",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "amount",
-						"type": "uint256"
-					}
-				],
-				"name": "NotRefund",
-				"type": "error"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "bidder",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "amount",
-						"type": "uint256"
-					}
-				],
-				"name": "NotWithdraw",
-				"type": "error"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "owner",
-						"type": "address"
-					}
-				],
-				"name": "OwnerCannotBid",
-				"type": "error"
-			},
-			{
 				"anonymous": false,
 				"inputs": [
 					{
@@ -253,19 +86,6 @@
 			},
 			{
 				"inputs": [],
-				"name": "isActive",
-				"outputs": [
-					{
-						"internalType": "bool",
-						"name": "",
-						"type": "bool"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
 				"name": "makeBid",
 				"outputs": [],
 				"stateMutability": "payable",
@@ -287,19 +107,6 @@
 			{
 				"inputs": [],
 				"name": "minBid",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "numBids",
 				"outputs": [
 					{
 						"internalType": "uint256",
@@ -368,9 +175,6 @@
 				"constructor": {
 					"notice": "Crea la subasta"
 				},
-				"isActive()": {
-					"notice": "Comprueba si la subasta sigue activa"
-				},
 				"makeBid()": {
 					"notice": "Realiza una puja"
 				},
@@ -401,11 +205,11 @@
 	},
 	"sources": {
 		"contracts/subasta.sol": {
-			"keccak256": "0xf03486edc02a9334628f207f6da740b684216b3d8d62ee9b6eaf7c102239e403",
+			"keccak256": "0x806135ee5b0491ba5cc480c585fcb1c1b4579743ee6f39ef0d29e2a435d7be23",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://18deaed13320a5e187dda34c69db2398bcbd3e1e959cd503dcfd6efdaf69126c",
-				"dweb:/ipfs/Qmf8PW4dRAK9feAzwXk5xuxp3XTi1io75gKSWYrecdfwog"
+				"bzz-raw://1ca8822af96d27cd908c8a68944ced8f475e46895e3adcd791070f6e55fb61c4",
+				"dweb:/ipfs/QmX72LRp2z2bsrnV2ovyyqhYDt1eARCGxPuSo8LrYdfQ64"
 			]
 		}
 	},
