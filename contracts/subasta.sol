@@ -166,7 +166,7 @@ contract Subasta {
         }*/
 
         // Subasta cerrada
-        require(block.timestamp > deadLine, "La subasta no est cerrada todavia");
+        require(block.timestamp > deadLine, "La subasta no esta cerrada todavia");
         /*if (block.timestamp < deadLine) {
             revert AuctionNotEnded({
                 currentTime: block.timestamp,
